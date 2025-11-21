@@ -1005,28 +1005,28 @@ const requireAnyRole = (req, res, next) => {
 const guardPage = (role) => (req, res, next) => {
   const session = parseSession(req);
   if (!session) {
-    return res.redirect(`/login.html?role=${role}`);
+    return res.redirect(`/High_School_Musical/login.html?role=${role}`);
   }
   if (role === 'admin' && session.role !== 'admin') {
-    return res.redirect('/login.html?role=admin');
+    return res.redirect('/High_School_Musical/login.html?role=admin');
   }
   if (role === 'sales' && !['sales', 'admin'].includes(session.role)) {
-    return res.redirect('/login.html?role=sales');
+    return res.redirect('/High_School_Musical/login.html?role=sales');
   }
   next();
 };
 
-app.get('/admin.html', guardPage('admin'), (req, res) => {
+app.get('/High_School_Musical/admin.html', guardPage('admin'), (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
-app.get('/sales.html', guardPage('sales'), (req, res) => {
+app.get('/High_School_Musical/sales.html', guardPage('sales'), (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'sales.html'));
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/api/auth/session', (req, res) => {
+app.get('/High_School_Musical/api/auth/session', (req, res) => {
   const session = parseSession(req);
   if (!session) {
     return res.json({ authenticated: false, role: null, username: null });
@@ -1034,7 +1034,7 @@ app.get('/api/auth/session', (req, res) => {
   return res.json({ authenticated: true, role: session.role, username: session.username });
 });
 
-app.post('/api/auth/login', async (req, res) => {
+app.post('/High_School_Musical/api/auth/login', async (req, res) => {
   const { username, password } = req.body || {};
   if (!username || !password) {
     return res.status(400).json({ error: '请输入用户名与密码' });
@@ -1057,7 +1057,7 @@ app.post('/api/auth/login', async (req, res) => {
   return res.json({ ok: true, role: account.role, username: account.username });
 });
 
-app.post('/api/auth/logout', requireAnyRole, (req, res) => {
+app.post('/High_School_Musical/api/auth/logout', requireAnyRole, (req, res) => {
   if (req.session) {
     sessions.delete(req.session.sessionId);
   }
@@ -1065,7 +1065,7 @@ app.post('/api/auth/logout', requireAnyRole, (req, res) => {
   res.json({ ok: true });
 });
 
-app.get('/api/accounts', requireRole('admin'), (_req, res) => {
+app.get('/High_School_Musical/api/accounts', requireRole('admin'), (_req, res) => {
   const accounts = Object.values(state.accounts)
     .map(({ username, role, createdAt, updatedAt }) => ({ username, role, createdAt, updatedAt }))
     .sort((a, b) => {
@@ -1077,7 +1077,7 @@ app.get('/api/accounts', requireRole('admin'), (_req, res) => {
   res.json({ accounts });
 });
 
-app.post('/api/accounts', requireRole('admin'), async (req, res) => {
+app.post('/High_School_Musical/api/accounts', requireRole('admin'), async (req, res) => {
   const { username, password, role } = req.body || {};
   if (!username || typeof username !== 'string' || !password || typeof password !== 'string') {
     return res.status(400).json({ error: '用户名与密码不能为空' });
@@ -1094,13 +1094,13 @@ app.post('/api/accounts', requireRole('admin'), async (req, res) => {
   res.json({ ok: true });
 });
 
-app.get('/api/merch/products', requireAnyRole, (_req, res) => {
+app.get('/High_School_Musical/api/merch/products', requireAnyRole, (_req, res) => {
   ensureMerchState();
   const products = Object.values(state.merch.products).map(serializeProduct);
   res.json({ products });
 });
 
-app.post('/api/merch/products', requireRole('admin'), async (req, res) => {
+app.post('/High_School_Musical/api/merch/products', requireRole('admin'), async (req, res) => {
   ensureMerchState();
   const { name, price, stock, description, imageData, enabled = true } = req.body || {};
   if (!name || typeof name !== 'string') {
