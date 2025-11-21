@@ -37,7 +37,7 @@ form.addEventListener('submit', async (event) => {
   messageEl.textContent = '正在登录...';
   messageEl.style.color = '#20639b';
   try {
-    const response = await fetch('/api/auth/login', {
+    const response = await fetch('/High_School_Musical/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
